@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Sofi's blog</title>
+        <description>Blog about the finer points of the CSS</description>
+        <link>https://ariarzer.dev/</link>
+        <item>
+            <title>My first article</title>
+            <author>ariarzer@gmail.com (Sofi Valitova)</author>
+        </item>
+    </channel>
+</rss>
