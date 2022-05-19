@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sofi's blog</title>
+
+    <meta name="description" content="Explanation of the difference between color space and color gamut with an example of color() function">
+
+    <meta property="og:url" content="https://ariarzer.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Color space and color gamut">
+    <meta property="og:description" content="Explanation of the difference between color space and color gamut with an example of color()function">
+    <meta property="og:image" content="/img/index_og_preview.png">
+
+    <meta name="twitter:creator" content="@ariarzer">
+    <meta name="twitter:site" content="@ariarzer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="/img/index_twitter_preview.png">
+
+    <meta name="vk:image" content="/img/index_vk_preview.png">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml"/>
+
+    <link rel="stylesheet" id="style_link">
+</head>
+<body>
+
+    <header>
+        <p>My name is Sofi. I am CSS engineer. This is my <a href="/">blog</a>.</p>
+        <p class="NoVisibleWithStyle">If you're really hurt without styles, you can
+            <button onclick="document.getElementById('style_link').href='/style/common.css'">
+                turn
+            </button>
+            them on.
+        </p>
+    </header>
+    <article>
+        <p><time datetime="2022-05-19 21:26">May 19, 2022</time>.</p>
+        <h1>Color space and color gamut</h1>
+        <p>The <code>color()</code> - is the phenomenal css function!</p>
+        <p>When other color functions provide you to define color in different spaces, this one provide you able to
+            choose the color gamut. So, this one is very good for explain that gamut and space are a different
+            things.</p>
+        <p><strong>Gamut</strong> - is a set of colors that you screen can display.</p>
+        <p><strong>Space</strong> - is way to set a specific color from defined gamut.</p>
+        <p>When you use a HEX or a rgb(), you define color by RGB-cube (as a space) in an s-rgb (as a gamut).
+            Same way, when you use a hsl(), you define a color by HSL (as a space) in an s-rgb (as a gamut).
+            Kind of same way, when you use a lch(), you define a color by LAB, (as a space) in an infinite (as a
+            gamut).</p>
+        <p>So, at all this cases, you can't choose space and gamut separately. Function already did it instead you.
+            But! If you use a color() function, you can!</p>
+        <p><code>color(srgb 1 1 1)</code> - define color by sRGB space in s-rgb gamut.
+            <code>color(display-P3 1 1 1)</code> - define color by sRGB space in display-p3 gamut.</p>
+        <p>This case is perfect for show the difference between terms space and gamut. You can use the every system for
+            define concrete color in every set of colors. RBG-cube and HSL are just a coordinate system, that can be
+            used in every set of colors.</p>
+    </article>
+
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a href="https://vk.com/ariarzer">VK</a>,
+            <a href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a href="https://patreon.com/ariarzer">patreon</a>.
+        </p>
+        <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
+</body>
