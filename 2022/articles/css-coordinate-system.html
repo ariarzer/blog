@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CSS mind blog</title>
+
+    <meta name="description" content="CSS coordinate systems.">
+
+    <meta property="og:url" content="https://ariarzer.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About CSS coordinate systems">
+    <meta property="og:description"
+          content="The physical coordinate system familiar to us is not the most convenient for text transmission. I tell you what else there are and why they are better.">
+    <meta property="og:image" content="/img/index_og_preview.png">
+
+    <meta name="twitter:creator" content="@aria_rzer">
+    <meta name="twitter:site" content="@aria_rzer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="/img/index_twitter_preview.png">
+
+    <meta name="vk:image" content="/img/index_vk_preview.png">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml"/>
+
+    <link rel="stylesheet" id="style_link">
+</head>
+
+<body>
+
+    <header>
+        <p>My name is Sofi. I am CSS engineer. This is my <a href="/">blog</a>.</p>
+        <p class="NoVisibleWithStyle">If you're really hurt without styles, you can
+            <button onclick="document.getElementById('style_link').href='/style/common.css'">
+                turn
+            </button>
+            them on.
+        </p>
+    </header>
+
+    <article>
+
+        <h1>About CSS coordinate systems</h1>
+        <p><em>Disclaimer</em>: the article does not mention the using of new coordinate systems in code.
+            An example of indents and borders for Arabic text is provided to emphasize the urgency of the problem.</p>
+        <h2>Physical</h2>
+        <p>The most intuitive system: left, right, top, bottom. Or the standard directions of the X and Y axes, which
+            are used, for example, in the <code>background-position</code> property.</p>
+        <p> The properties like <code>margin-left</code> and <code>margin-right</code>, <code>border-left</code>
+            and <code>border-right</code> and others depending on the physical display of the document came form it.</p>
+        <h2>Why isn't it perfect?</h2>
+        <p>Because not all languages and cultures adhere to writing text from left to right, like other European
+            languages.</p>
+        <p>If a block with English text should have an indent and a border on the left, then in fact they should be on
+            the side where the text is aligned against. That is, when the text is in Arabic, the indent should be
+            on the right.</p>
+        <iframe src="demo/css-coordinate-system/demo1.html"></iframe>
+        <p>This can be done using a special pseudo-class:</p>
+        <pre><code data-lang="css">p:dir(ltr) {
+    padding-left: 1em;
+    border-left: 2px solid;
+}
+p:dir(rtl) {
+    padding-right: 1em;
+    border-right: 2px solid;
+}
+</code></pre>
+        <p>Or, since <a href="https://caniuse.com/?search=dir()">support</a> for this pseudo-class is poor, you can
+            use an attribute selector:</p>
+        <pre><code data-lang="css">p[dir=ltr] {
+    padding-left: 1em;
+    border-left: 2px solid;
+}
+p[dir=rtl] {
+    padding-right: 1em;
+    border-right: 2px solid;
+}
+</code></pre>
+        <p>Having done this, you can understand that for the design of content (mainly text), physical coordinates are
+            not very well suited. And try to create new ones.</p>
+        <h2>Main Metrics</h2>
+        <p>To describe the writing mode in one particular document, you need to know three parameters:</p>
+        <ul>
+            <li><strong>Where is the string directed?</strong></li>
+            <li><strong>Where will the line wrap?</strong> E.g. if the text does not fit into one line. This direction
+                collocates with the flow of blocks.
+            </li>
+            <li><strong>Where are the letters in the string oriented?</strong> For example, if we write vertically by
+                hieroglyphs, should Latin letters be written sideways, or also vertically?
+            </li>
+        </ul>
+        <p>Based on this, we have three one-dimensional coordinate systems:</p>
+        <h2>Depends on document flow</h2>
+        <p>Where is the block &quot;top&quot; and &quot;bottom&quot;. In languages with vertical writing, block flow will not
+            vertical, like ours, but horizontal. That means perpendicular to the direction of the line.</p>
+        <p>In this system, the <strong>block flow</strong> is taken as the axis. The direction of the
+            axis is the same as flow.</p>
+        <p>Coordinates are defined:</p>
+        <ul>
+            <li>from the beginning of this flow fragment (or this block) - <strong>block-start</strong></li>
+            <li>from the end of this flow fragment (or this block) - <strong>block-end</strong></li>
+        </ul>
+        <img srcset="img/css-coordinate-system/block-flow-horizontal_2024.png 2024w,
+                     img/css-coordinate-system/block-flow-horizontal_1012.png 1012w,
+                     img/css-coordinate-system/block-flow-horizontal_506.png 506w,"
+             alt="one-dimensional coordinate system inside block flow with english text"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <img srcset="img/css-coordinate-system/block-flow-vertical_2024.png 2024w,
+                     img/css-coordinate-system/block-flow-vertical_1012.png 1012w,
+                     img/css-coordinate-system/block-flow-vertical_506.png 506w,"
+             alt="one-dimensional coordinate system inside block flow with Japanese vertical text"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <h2>Depends on text flow</h2>
+        <p>Where does the string start and end. In Arabic, and other languages that are written from right to left,
+            it is the opposite from familiar to us.</p>
+        <p>In this system, the direction of writing the line is taken as the axis.</p>
+        <p>Coordinates are defined:</p>
+        <ul>
+            <li>from the beginning of the line - <strong>inline-start</strong></li>
+            <li>from the end of the line - <strong>inline-end</strong></li>
+        </ul>
+        <img srcset="img/css-coordinate-system/inline-base_2024.png 2024w,
+                     img/css-coordinate-system/inline-base_1012.png 1012w,
+                     img/css-coordinate-system/inline-base_506.png 506w,"
+             alt="one-dimensional coordinate system inside the text flow"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <h2>Depends on line orientation</h2>
+        <p>Where is the top and bottom of the line. This affects for example the
+            <code>text-decoration-style: underline</code> property. AT languages with vertical writing will have
+            underlining on the side.</p>
+        <p>Coordinates are defined:</p>
+        <ul>
+            <li>from the top of the line - <strong>line-over</strong></li>
+            <li>from the bottom of the line - <strong>line-under</strong></li>
+        </ul>
+        <img srcset="img/css-coordinate-system/line-orientation_2024.png 2024w,
+                     img/css-coordinate-system/line-orientation_1012.png 1012w,
+                     img/css-coordinate-system/line-orientation_506.png 506w,"
+             alt="one-dimensional coordinate system inside a line on the example of vertical and horizontal text"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <h2>Sources</h2>
+        <ul>
+            <li><a href="https://drafts.csswg.org/css-writing-modes-4/#abstract-box">Draft</a> of the 4-th version
+                writing modes spec.</li>
+        </ul>
+    </article>
+
+    <aside>
+        <h1 id="citation">Citation</h1>
+        <ul>
+        </ul>
+        <p>If you see a link to this article in a source that is not listed here, please
+            <a href="https://t.me/ariarzer">let me know</a>.</p>
+    </aside>
+
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a href="https://vk.com/ariarzer">VK</a>, <a
+                href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a href="https://patreon.com/ariarzer">patreon</a>.</p>
+        <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
+
+</body>
+</html>
