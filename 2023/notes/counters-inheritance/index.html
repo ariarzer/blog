@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sofi's blog</title>
+
+    <meta name="description"
+          content="Deep dive into css-counters specification with a lot of examples.">
+
+    <meta property="og:url" content="https://ariarzer.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The inheritance of CSS-counters.">
+    <meta property="og:description"
+          content="Deep dive into css-counters specification with a lot of examples.">
+    <meta property="og:image" content="/img/index_og_preview.png">
+
+    <meta name="twitter:creator" content="@ariarzer">
+    <meta name="twitter:site" content="@ariarzer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="/img/index_twitter_preview.png">
+
+    <meta name="vk:image" content="/img/index_vk_preview.png">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml"/>
+
+    <link rel="stylesheet" id="style_link">
+</head>
+<body>
+
+    <header>
+        <p>My name is Sofi. I am CSS engineer. This is my <a href="/">blog</a>.</p>
+        <p class="NoVisibleWithStyle">If you're really hurt without styles, you can
+            <button onclick="document.getElementById('style_link').href='/style/common.css'">
+                turn
+            </button>
+            them on.
+        </p>
+    </header>
+    <article>
+        <p>
+            <time datetime="2023-06-14 11:26">June 14, 2023</time>
+            .
+        </p>
+
+        <h1>The inheritance of CSS-counters</h1>
+        <p>According to the specification, each element has a <strong>set of counters</strong>. And for each counter in
+            that set there are:</p>
+        <ol>
+            <li>a counter name as a string</li>
+            <li>a counter creator element as a reference to the element</li>
+            <li>a counter value as an integer</li>
+        </ol>
+        <p><strong>Where does this set come from?</strong></p>
+        <p>An element inherits its <strong>initial set of counters</strong> (in addition to those declared on the
+            element itself) from its parent and previous sibling. This set then updates values of its counters with the
+            values of the counters with the same name of its previous element <a
+                    href="https://dom.spec.whatwg.org/#concept-tree-order">in tree order</a>.</p>
+        <p>You can read the detailed algorithm description <a
+                href="https://www.w3.org/TR/css-lists-3/#inheriting-counters">in the specification</a>. But here I want
+            to leave here the summary of it with some simplifications:</p>
+        <ol>
+            <li>Copy the parent's set of counters.</li>
+            <li>If there are previous elements at the same nesting level, then take the nearest one and copy counters
+                from there that we don’t have yet.
+            </li>
+            <li>Take the nearest previous element in the tree order, select by name the counters that we already have in
+                the list, and take the new values.
+            </li>
+        </ol>
+        <p>From that we can get the main idea, that I want to put here:</p>
+        <p><strong>The values of the counters can be influenced by the ancestors and siblings, but the existence of the
+            counters themselves on this element is only affected by the ancestors.</strong></p>
+        <p>That idea I want to explain and prove by following example:</p>
+        <pre><code>&lt;ul class='outer'&gt;
+  &lt;li class='outer__elem'&gt;&lt;/li&gt;
+  &lt;li class='outer__elem''&gt;&lt;/li&gt;
+  &lt;li class='outer__elem'&gt;
+    &lt;ul class='inner'&gt;
+      &lt;li class='inner__elem'&gt;&lt;/li&gt;
+      &lt;li class='inner__elem'&gt;&lt;/li&gt;
+      &lt;li class='inner__elem'&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class='outer__elem'&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+        <p>There is an outer list and an inner list nested in one of the items of the outer list. Let's add styles:</p>
+        <pre><code>/* set the counter on outer list */
+ul.outer {
+  counter-reset: global;
+}
+
+/* increase counter on every list item */
+li {
+  counter-increment: global;
+}
+
+/* display the counter */
+li::before {
+  content: counter(global);
+}
+</code></pre>
+        <p>With this CSS the counter is incremented before each displaying, and it looks like this:</p>
+        <iframe src="demo/1.html"></iframe>
+        <p>Now let's create another counter, the local one, and display them too:</p>
+        <pre><code>/* set the counter on outer list */
+ul.outer {
+  counter-reset: outer;
+}
+
+/* set the counter on inner list */
+ul.inner {
+  counter-reset: inner;
+}
+
+/* increase counter on every outer list item */
+li.outer__elem {
+  counter-increment: outer;
+}
+
+/* increase counter on every inner list item */
+li.inner__elem {
+  counter-increment: inner;
+}
+
+/* display the counters */
+li.outer__elem::before {
+  content: counter(outer);
+}
+
+li.inner__elem::before {
+  content: counter(inner);
+}
+</code></pre>
+        <p>Now we see this picture:</p>
+        <iframe src="demo/2.html"></iframe>
+        <p>And what happens if you try to take out the internal counter in the external list?</p>
+        <pre><code>/* display both counters on every list item */
+li::before {
+  content: counter(outer) ', ' counter(inner);
+}
+</code></pre>
+        <iframe src="demo/3.html"></iframe>
+        <p>The zeros are shown because when the <code>counter()</code> function does not have a counter of given name in
+            scope, it returns <code>0</code> as the default value. It means that <em>inner counter is not available in
+                the external list</em>. And this is an <strong>important conclusion for us, which was first taken from
+                the specification, but now from practice.</strong></p>
+        <p>Let's add a global counter from the first code fragment to this code and display it on the screen:</p>
+        <pre><code>li::before {
+   content: counter(global) ' - ' counter(outer) ', ' counter(inner);
+}
+</code></pre>
+        <iframe src="demo/4.html"></iframe>
+        <p>Let's turn to the algorithm from the specification at the beginning of the article and see why the <code>inner</code>
+            counter at the end is not available and how it generally works from the inside.</p>
+        <p>The <strong>inherited set</strong> of counters for the first element of the outer list looks like this:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>In order not to be confused by the value of <code>0</code>, let me emphasise you that this is an <strong>inherited
+            set</strong>. Before displaying, the element does all the specified operations with it, in this case <code>counter-increment:
+            other;</code>, that is, it adds 1, so we see exactly 1 on the screen.</p>
+        <p>Therefore, the inherited set for the second element of the outer list looks like this:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>1</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>The <strong>inherited set</strong> of the first element of the internal list, which already has three
+            counters:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><code>ul.inner</code></td>
+                <td><code>inner</code></td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>The <strong>set</strong> of the last element of the outer list immediately following the element with the
+            inner list:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>3</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>Why is there no internal counter here? <strong>Let's go through the algorithm step by step for the current
+            element!</strong></p>
+        <p><strong>Step 1.</strong> We take a set of the parent and copy. This is <code>ul.other</code> and its set
+            looks like this:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+        <p><strong>Step 2.</strong> We take the previous element of the same nesting level and copy counters from there,
+            whose names we do not have yet. It will be <code>li.other__elem:nth-child(3)</code> and its set looks like
+            this:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>2</td>
+            </tr>
+            </tbody>
+        </table>
+        <p><strong>Step 3.</strong> Of the counters that are already in the element's set after step 2, there are only
+            <code>other</code> and <code>global</code> counters here, so we copy their values.</p>
+        <p><strong>In total</strong>: the <strong>inherited set</strong> of counters for the <code>li.other__elem:nth-child(4)</code>
+            element look like this:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>creator</th>
+                <th>name</th>
+                <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>global</code></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td><code>ul.outer</code></td>
+                <td><code>outer</code></td>
+                <td>3</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>As you can see, there is no way for the internal counter to get into that element.</p>
+        <p><strong>At the end of the article, we can once again conclude that the values of the counters can be
+            influenced by the ancestors and children of the ancestors, that is, the entire tree from above, and the
+            presence of the counters themselves on this element only by the ancestors of this nesting level and higher
+            ones.</strong></p>
+    </article>
+
+    <h2>Sources</h2>
+    <ul>
+        <li>The <a href="https://www.w3.org/TR/css-lists-3/#inheriting-counters">css-list-3</a> specification.</li>
+    </ul>
+
+    <h2>Citation</h2>
+    <p>If you see a link to this article in a source that is not listed here, please let me know.</p>
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a
+                href="https://vk.com/ariarzer">VK</a>,
+            <a href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a
+                href="https://patreon.com/ariarzer">patreon</a>.
+        </p>
+        <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
+</body>
