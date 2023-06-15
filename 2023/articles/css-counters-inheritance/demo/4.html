@@ -24,11 +24,7 @@
     </ul>
     <style>
         ul.outer {
-            counter-reset: global outer;
-        }
-
-        li {
-            counter-increment: global;
+            counter-reset: global 0 outer 0;
         }
 
         ul.inner {
@@ -36,11 +32,11 @@
         }
 
         li.outer__elem {
-            counter-increment: outer;
+            counter-increment: outer global;
         }
 
         li.inner__elem {
-            counter-increment: inner;
+            counter-increment: inner global;
         }
 
         li::before {
