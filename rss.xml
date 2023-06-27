@@ -4,6 +4,18 @@
         <title>Sofi's blog</title>
         <description>Blog about the finer points of the CSS</description>
         <link>https://ariarzer.dev/</link>
+
+        <item>
+            <title>How we can use the self inheritance of CSS-counters?</title>
+            <author>ariarzer@gmail.com (Sofi Valitova)</author>
+            <link>https://ariarzer.dev/2023/tutorials/counters-self-inheritance</link>
+            <guid>https://ariarzer.dev/2023/tutorials/counters-self-inheritance</guid>
+            <pubDate>Wen, 14 Jun 2023 11:30:00 +0300</pubDate>
+            <description>Creating a numbering for complicate list with only one counter!
+            </description>
+            <source url="https://ariarzer.dev/2023/tutorials/counters-self-inheritance">Publication source</source>
+        </item>
+
         <item>
             <title>The inheritance of CSS-counters.</title>
             <author>ariarzer@gmail.com (Sofi Valitova)</author>

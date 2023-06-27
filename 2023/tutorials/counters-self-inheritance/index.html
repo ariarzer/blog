@@ -5,20 +5,20 @@
     <title>Sofi's blog</title>
 
     <meta name="description"
-          content="How we can create a numbering for complicate list with only one counter.">
+          content="Creating a numbering for complicate list with only one counter!">
 
     <meta property="og:url" content="https://ariarzer.dev/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="How we can use the self inheritance of CSS-counters?">
-    <meta property="og:description" content="How we can create a numbering for complicate list with only one counter.">
-    <meta property="og:image" content="https://ariarzer.dev/img/index_og_preview.png">
+    <meta property="og:description" content="Creating a numbering for complicate list with only one counter!">
+    <meta property="og:image" content="https://ariarzer.dev/2023/tutorials/counters-self-inheritance/preview/preview.png">
 
     <meta name="twitter:creator" content="@aria_rzer">
     <meta name="twitter:site" content="@aria_rzer">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://ariarzer.dev/img/index_twitter_preview.png">
+    <meta name="twitter:image" content="https://ariarzer.dev/2023/tutorials/counters-self-inheritance/preview/preview.png">
 
-    <meta name="vk:image" content="https://ariarzer.dev/img/index_vk_preview.png">
+    <meta name="vk:image" content="https://ariarzer.dev/2023/tutorials/counters-self-inheritance/preview/preview.png">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -44,10 +44,16 @@
         </p>
     </header>
     <article>
-        <p><time datetime="2023-06-19 21:26">June 19, 2023</time>.</p>
+        <p>
+            <time datetime="2023-06-27 21:26">June 27, 2023</time>
+            .
+        </p>
 
         <h1>How we can use the self inheritance of CSS-counters?</h1>
-        <p>As we know from theory, <strong>each element inherits from its parent a set of counters</strong>, which it
+        <p>As we know from theory (you can read the
+            <a href="https://www.w3.org/TR/css-lists-3/#nested-counters">specification</a> or
+            <a href="https://ariarzer.dev/2023/articles/css-counters-inheritance/">my previous article</a>),
+            <strong>each element inherits from its parent a set of counters</strong>, which it
             completes with its own counters and passes down the tree to be inherited by its children.</p>
         <p>Instantiating a new counter on an element which inherited an <strong>identically-named counter</strong> from
             its parent creates not a normal new counter of the same name, but the one <strong>nested inside the existing
@@ -56,18 +62,19 @@
             the innermost counter of a given name on the element.
             Or, if we need all counter with given name on given element, we can use the <code>counters()</code>
             function. It returns us all those counter in a list.
-            It also has a second argument, a string for splitting counters on display. It works the same way as the
+            It also has a second argument, a separator string counters on display. It works the same way as the
             argument of function <a
                     href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join"><code>Array.prototype.join()</code></a>
             in JavaScript.</p>
         <p>So, with the self inheritance of CSS-counters we can develop <strong>numbering of complicate list with only
             one counter</strong>!</p>
-        <pre><code>&lt;ul class=&quot;parent&quot;&gt;
+        <pre><code>&lt;ul&gt;
     &lt;li&gt;&lt;/li&gt;
     &lt;li&gt;
-        &lt;ul class=&quot;child&quot;&gt;
+        &lt;ul&gt;
             &lt;li&gt;&lt;/li&gt;
             &lt;li&gt;&lt;/li&gt;
+            ....
         &lt;/ul&gt;
     &lt;/li&gt;
 &lt;/ul&gt;
@@ -101,15 +108,17 @@
 
         <h2>Citation</h2>
         <p>If you see a link to this article in a source that is not listed here, please let me know.</p>
-        <footer>
-            <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a
-                    href="https://vk.com/ariarzer">VK</a>,
-                <a href="https://t.me/ariarzer">telegram</a>.</p>
-            <p>To motivate me to write about CSS more often, follow me on <a
-                    href="https://patreon.com/ariarzer">patreon</a>.
-            </p>
-            <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+    </article>
 
-            <p>Found a typo? Let me know about it.</p>
-        </footer>
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a
+                href="https://vk.com/ariarzer">VK</a>,
+            <a href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a
+                href="https://patreon.com/ariarzer">patreon</a>.
+        </p>
+        <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
 </body>
