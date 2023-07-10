@@ -21,6 +21,16 @@ body {
     min-width: min(500px, 90vw);
 }
 
+@media (prefers-color-scheme: dark) {
+    a {
+        color: rgb(158, 158, 255);
+    }
+
+    a:visited {
+        color: rgb(208, 173, 240);
+    }
+}
+
 @media print {
     :root {
         font-size: 0.7em;
