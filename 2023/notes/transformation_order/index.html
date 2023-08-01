@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sofi's blog</title>
+
+    <meta name="description"
+          content="The order of applying transformations.">
+
+    <meta property="og:url" content="https://ariarzer.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The order of applying transformations.">
+    <meta property="og:description" content="How do the newly introduced individual transform properties interact with each other and with the transform property?">
+    <meta property="og:image"
+          content="https://ariarzer.dev/2023/notes/transformation_order/preview/preview.png">
+
+    <meta name="twitter:creator" content="@aria_rzer">
+    <meta name="twitter:site" content="@aria_rzer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image"
+          content="https://ariarzer.dev/2023/notes/transformation_order/preview/preview.png">
+
+    <meta name="vk:image" content="https://ariarzer.dev/2023/notes/transformation_order/preview/preview.png">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml"/>
+
+    <link rel="stylesheet" id="style_link">
+</head>
+<body>
+
+    <header>
+        <p>My name is Sofi. I am CSS engineer. This is my <a href="/">blog</a>.</p>
+        <p class="NoVisibleWithStyle">If you're really hurt without styles, you can
+            <button onclick="document.getElementById('style_link').href='/style/common.css'">
+                turn
+            </button>
+            them on.
+        </p>
+    </header>
+    <article>
+        <p>
+            <time datetime="2023-08-1 21:26">August 1, 2023</time>
+            .
+        </p>
+
+        <h1>The order of applying transformations</h1>
+        <p>Every block is transformed by <a href="https://drafts.csswg.org/css-transforms-1/#transformation-matrix">transformation
+            matrix</a>, which is computer based on <code>transform</code>, <code>transform-origin</code>, <code>translate</code>,
+            <code>rotate</code> and <code>scale</code> properties.</p>
+        <p>This properties are applied in the following order:</p>
+        <ol>
+            <li>Change the center of block transformation according to the <code>transform-origin</code> property.</li>
+            <li>Move block according to the value of <code>translate</code> property</li>
+            <li>Rotate block according to the value of <code>rotate</code> property.</li>
+            <li>Scale block according to the value of <code>scale</code> property.</li>
+            <li>Apply every function from <code>transform</code> property by the list from right to left.</li>
+        </ol>
+        <h2>What does it mean to us as developers?</h2>
+        <p>Using the individual properties of transformations, it is not possible to control the order in which they are
+            applied.</p>
+        <img srcset="images/unique_properties_1012.png 2024w,
+                     images/unique_properties_3036.png 3036w,
+                     images/unique_properties_4048.png 4048w,
+                     images/unique_properties_1012.png 1012w,"
+             alt="пример применения индивидуальных свойств трансформации"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <p>Whereas the functions in the <code>transform</code> property are applied in the order in which they are
+            specified.</p>
+        <img srcset="images/transform_property_2024.png 2024w,
+                     images/transform_property_1012.png 1012w,
+                     images/transform_property_3036.png 3036w,
+                     images/transform_property_4048.png 4028w,"
+             alt="пример применения свойства transform"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <p>Also, ALL functions from <code>transform</code> are applied, but individual transformation properties
+            override each other as common css properties.</p>
+        <img srcset="images/many_transformation_1012.png 2024w,
+                     images/many_transformation_3036.png 3036w,
+                     images/many_transformation_4048.png 4048w,
+                     images/many_transformation_1012.png 1012w,"
+             alt="пример применения свойства transform"
+             loading="lazy"
+             width="500px"
+             height="250px"
+             border="1px"
+        >
+        <h2>Sources</h2>
+        <ul>
+            <li>The <a href="https://drafts.csswg.org/css-transforms-2/#ctm">css-transforms-2</a> specification.</li>
+        </ul>
+
+        <h2>Citation</h2>
+        <p>If you see a link to this article in a source that is not listed here, please let me know.</p>
+    </article>
+
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a
+                href="https://vk.com/ariarzer">VK</a>,
+            <a href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a
+                href="https://patreon.com/ariarzer">patreon</a>.
+        </p>
+        <p>My <a href="https://t.me/ariarzer_dev">channel</a> about css in the telegram.</p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
+</body>
