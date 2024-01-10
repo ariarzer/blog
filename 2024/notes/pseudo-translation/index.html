@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CSS blog</title>
+
+    <meta name="description" content="Pseudo-elements and translators.">
+
+    <meta property="og:url" content="https://ariarzer.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pseudo-elements and translators.">
+    <meta property="og:description"
+          content="The text from `content` property in not translated by browser embedded translator. It is better to not put important text in here.">
+
+    <meta property="og:image" content="https://ariarzer.dev/2024/notes/pseudo-translation/preview/preview.png">
+
+    <meta name="twitter:creator" content="@ariarzer">
+    <meta name="twitter:site" content="@ariarzer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://ariarzer.dev/2024/notes/pseudo-translation/preview/preview.png">
+
+    <meta name="vk:image" content="https://ariarzer.dev/2024/notes/pseudo-translation/preview/preview.png">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="alternate" type="application/rss+xml" href="https://ariarzer.dev/rss.xml"/>
+
+    <link rel="stylesheet" id="style_link">
+</head>
+
+<body>
+    <header>
+        <p>My name is Sofi. I am CSS engineer. This is my <a href="/">blog</a>.</p>
+        <p class="NoVisibleWithStyle">If you're really hurt without styles, you can
+            <button onclick="document.getElementById('style_link').href='/style/common.css'">
+                turn
+            </button>
+            them on.
+        </p>
+    </header>
+    <article>
+        <p>
+            <time datetime="2024-01-11 17:00">January 11, 2023</time>
+            .
+        </p>
+        <h1>Pseudo-elements and translators.</h1>
+        <p><strong>It is better to not put an important text in <code>content</code> property.</strong> And even better
+            to not put any text here.</p>
+        <p>Apart from the fact, that it is not visible for screen readers, because it doesn't exist in DOM, it can't be
+            translated by browser embedded translators such as google translator in Google Chrome.</p>
+        <p>Here is an example. This page is pn Finnish language (it defines by <code>lang="fi"</code> attribute on
+            <code>html</code> tag). The text with green emoji 🍏 is written inside the <code>p</code> tag. And the text
+            with red emoji in written with <code>content</code> property.</p>
+        <iframe src="demo/1.html"></iframe>
+        <pre><code data-lang="html">&lt;html lang="fi">
+&lt;head>
+    &lt;meta charset="UTF-8">
+&lt;/head>
+&lt;body>
+    &lt;p>omena 🍏&lt;/p>
+    &lt;div>&lt;/div>
+    &lt;style>
+        div:after {
+            content: ' omena 🍎';
+        }
+    &lt;/style>
+&lt;/body>
+&lt;/html></code></pre>
+        <p>You can open this demo <a href="demo/1.html" target="_blank">in new tab</a> and translate.
+            You will see that only the first text would be translated.</p>
+        <img src="./img/img.png"
+             alt="only the first text is translated"
+             loading="lazy"
+             width="300px"
+             border="1px"
+        >
+
+        <h2>Citation</h2>
+        <p>If you see a link to this article in a source that is not listed here, please let me know.</p>
+    </article>
+
+    <footer>
+        <p>My accounts at <a href="https://twitter.com/aria_rzer">twitter</a>, <a
+                href="https://vk.com/ariarzer">VK</a>,
+            <a href="https://t.me/ariarzer">telegram</a>.</p>
+        <p>To motivate me to write about CSS more often, follow me on <a
+                href="https://patreon.com/ariarzer">patreon</a>.
+        </p>
+
+        <p>Found a typo? Let me know about it.</p>
+    </footer>
+
+</body>
+</html>
