@@ -31,13 +31,6 @@ body {
     }
 }
 
-@media print {
-    :root {
-        font-size: 0.7em;
-        line-height: 1.5;
-    }
-}
-
 aside {
     grid-area: aside;
 }
@@ -108,5 +101,16 @@ time {
     aside li:not(:last-child)::after {
         content: ',';
         padding-right: 0.3em;
+    }
+}
+
+@media print {
+    :root {
+        font-size: 0.7em;
+        line-height: 1.5;
+    }
+
+    .avatar {
+        display: none;
     }
 }
