@@ -106,7 +106,7 @@ time {
 
 @media print {
     :root {
-        font-size: 0.7em;
+        font-size: 0.65em;
         line-height: 1.5;
     }
 
