@@ -21,6 +21,10 @@ body {
     min-width: min(500px, 90vw);
 }
 
+a {
+    color: #33a;
+}
+
 @media (prefers-color-scheme: dark) {
     a {
         color: rgb(158, 158, 255);
@@ -113,8 +117,4 @@ time {
     .avatar {
         display: none;
     }
-}
-
-a {
-    color: #33a;
 }
